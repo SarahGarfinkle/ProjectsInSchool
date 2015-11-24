@@ -1,0 +1,279 @@
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+public class Project13SarahGarfinkle {
+	
+	final static Integer PLAYER_HAND = 7;
+	//ensures that the player's hand will always be 7
+	public static void main(String[] args)
+	{
+		System.out.println("Are you ready to play the most intense, the most exciting game of your life?");
+		System.out.println("Oh yea, it's time for GO FISH! Only the strongest shall survive. Get ready...");
+		System.out.println("Get set...");
+		System.out.println("LET'S PLAY THIS GAME!!!");
+		Scanner scnr = new Scanner(System.in);
+		ArrayList<Integer> userHand = new ArrayList<Integer>(userDeck());
+		ArrayList<Integer> computerHand = new ArrayList<Integer>(computerDeck());
+		ArrayList<Integer> modifiedDeck = new ArrayList<Integer>(baseDeckWithChange());
+		//implements all of the variables needed for methods to work
+		int loss = 0;
+		//loose size of card deck
+		while (userHand.size() > 0 && computerHand.size() > 0)
+		{
+			//ensures that both hands are greater than 0. If not greater than 0, then Go fish is Over
+			if(modifiedDeck.size() > 0)
+			{
+				userChoose(scnr, userHand, computerHand, modifiedDeck);
+				computerChoose(userHand, computerHand, modifiedDeck);
+			}
+			else
+			{
+				userNoDeck(scnr, userHand, computerHand);
+				computerNoDeck(userHand, computerHand);
+			}
+		}
+		if (userHand.size() < loss)
+		//checks to see if the size of the array is less than 0.
+		//if it is, then the user lost
+		{
+			System.out.println("The computer won. You failed yourself, your ancestors, and all those who ever loved you.");
+		}
+		else
+		{
+			System.out.println("You won. Relish this moment because it will likely be the high point of your early adult life");
+		}
+	}
+	
+	public static ArrayList<Integer> newDeck()
+	{
+		ArrayList<Integer> baseDeck = new ArrayList<Integer>(52);
+		//creates the initial base deck which will have 52 cards
+		int deckSize = 52;
+		//shows that the deck size will be that value
+		for(int i = 1; i <= deckSize/4; ++i)
+		{
+			baseDeck.add(i);
+			baseDeck.add(i);
+			baseDeck.add(i);
+			baseDeck.add(i);
+			//adds four elements to the baseDeck for every loop through
+			//Goal: if i is 2, arrayList will have elements [1,1,1,1,2,2,2,2]
+			//will eventually have 52 Integers, 4 each
+		}
+		return baseDeck;
+	}
+	
+	public static ArrayList<Integer> userDeck()
+	{
+		/*TODO:
+		 * i needs to be <= 7
+		 * create a random variable (rand)
+		 * choose random index from baseDeck
+		 * Add that number to player's hands
+		 * remove from the baseDeck index
+		 */
+		ArrayList<Integer> userHand = new ArrayList<Integer>(7);
+		//generates a new ArrayList which will have a size of 7 and take from the main deck
+		for(int i = 0, j= 51; i < PLAYER_HAND; ++i, --j)
+		//j is used when decrementing the size of the random variable. Did not make sense to make a nested for loop
+		{
+			Random rand = new Random();
+			//declares a new random
+			int randomIndex = rand.nextInt(j)+1;
+			//finds a random index within deck
+			Integer fromNewDeck = newDeck().get(randomIndex);
+			//gets the integer returned from the NewDeck's randomIndex number. 
+			userHand.add(fromNewDeck);
+			//adds the integer from the new deck to the UserIHand ArrayList
+			newDeck().remove(randomIndex);
+		}
+		Collections.sort(userHand);
+		//sorts in ascending order which will be useful when doing a comparison
+		return userHand;
+		//generates a random number which will be used for the index
+		
+	}
+	
+	public static ArrayList<Integer> computerDeck()
+	{
+		ArrayList<Integer> computerHand = new ArrayList<Integer>(7);
+		//makes an arrayList for the computer hand
+		for(int i = 0; i < userDeck().size(); i++)
+		{
+			//this will remove the usersDeck from the newDeck so there are only 44 playing cards to choose from
+			Integer removeObject = userDeck().get(i);
+			//creates a new Integer object by finding the Integer contained at index i of UserDeck
+			newDeck().remove(removeObject);
+			//removes it from the modified deck
+		}
+		for(int i = 0, j = 44; i < PLAYER_HAND; ++i, --j)
+		{
+			Random rand = new Random();
+			//declares a new random
+			int randomIndex = rand.nextInt(j)+1;
+			//finds a random index within deck
+			Integer fromNewDeck = newDeck().get(randomIndex);
+			//gets the integer returned from the NewDeck's randomIndex number. 
+			computerHand.add(fromNewDeck);
+			//adds the integer from the new deck to the computerHand ArrayList
+			newDeck().remove(randomIndex);
+		}
+		Collections.sort(computerHand);
+		//sorts in ascending order which will be useful when doing a comparison.
+		return computerHand;
+	}
+	
+	public static ArrayList<Integer> baseDeckWithChange()
+	{
+		//this will change the baseDeck
+		ArrayList<Integer> modifiedDeck = new ArrayList<Integer>(newDeck());
+		//creates a new deck, copied from the baseDeck
+		for(int i = 0; i < userDeck().size(); i++)
+			{
+				Integer removeObject = userDeck().get(i);
+				//creates a new Integer object by finding the Integer contained at index i of UserDeck
+				modifiedDeck.remove(removeObject);
+				//removes it from the modified deck
+			}
+		for(int i = 0; i < userDeck().size(); i++)
+		{
+			Integer removeObject = computerDeck().get(i);
+			//creates a new Integer object by finding the Integer contained at index i of computerDeck
+			modifiedDeck.remove(removeObject);
+			//removes it from the modified deck
+		}		
+		return modifiedDeck;
+	}
+	
+	/*
+	 * TODO
+	 * Method: get user input on which card wants
+	 * Select card from computer if applicable
+	 * else, draw from pile. Will need to use shuffle method
+	 */
+	public static void userNoDeck (Scanner scnr, ArrayList<Integer> userHand, ArrayList<Integer> computerHand)
+	{
+		System.out.println("Here are your cards.");
+		System.out.println(userHand.toString());
+		System.out.println("Which card number do you want from the computer?");
+		Integer keyboard = scnr.nextInt();
+		Integer desiredCard = keyboard;
+		//this gets the card
+		System.out.println("");
+		System.out.println("Computer, do you have a " + desiredCard +" card?");
+		System.out.println("");
+		int getCard = Collections.binarySearch(computerHand, desiredCard);
+		//searches within computer card for hand via the binary search method
+		if (getCard >= 0) //successful binary search returns an int value greater or equal to 0
+		{
+			System.out.println("Yes");
+			userHand.add(desiredCard);
+			//adds the desired card to the user's deck
+			Collections.sort(userHand);
+			//puts the userHand back in order
+			computerHand.remove(desiredCard);
+			//removes the Integer the user wants from the computer's hand
+			Collections.sort(computerHand);
+			//puts ComputerHand back in order for future binary search
+			
+		}
+	}
+	public static void computerNoDeck(ArrayList<Integer> userHand, ArrayList<Integer> computerHand)
+	{
+		Random rand = new Random();
+		int index = rand.nextInt(computerHand.size());
+		//gets random value
+		Integer cardValue = new Integer(index);
+		//makes an integer object
+		System.out.println("Do you have a " + computerHand.get(index) + " card?");
+		int findCard = Collections.binarySearch(userHand, computerHand.get(index));
+		//checks to see if card is present
+		if(findCard >= 0)
+		{
+			System.out.println("It appears as though you do have " + computerHand.get(index) + " card.");
+			userHand.remove(cardValue);
+			Collections.sort(userHand);
+			computerHand.add(cardValue);
+			//removes the card from the user's hand and adds it to the computer's
+		}
+	}
+	
+	public static void userChoose(Scanner scnr, ArrayList<Integer> userHand, ArrayList<Integer> computerHand, ArrayList<Integer> modifiedDeck)
+	{
+		System.out.println("Here are your cards.");
+		System.out.println(userHand.toString());
+		System.out.println("Which card number do you want from the computer?");
+		Integer keyboard = scnr.nextInt();
+		Integer desiredCard = keyboard;
+		//this gets the card
+		System.out.println("");
+		System.out.println("Computer, do you have a " + desiredCard +" card?");
+		System.out.println("");
+		int getCard = Collections.binarySearch(computerHand, desiredCard);
+		//searches within computer card for hand via the binary search method
+		if (getCard >= 0) //successful binary search returns an int value greater or equal to 0
+		{
+			System.out.println("Yes");
+			userHand.add(desiredCard);
+			//adds the desired card to the user's deck
+			Collections.sort(userHand);
+			//puts the userHand back in order
+			computerHand.remove(desiredCard);
+			//removes the Integer the user wants from the computer's hand
+			Collections.sort(computerHand);
+			//puts ComputerHand back in order for future binary search
+			
+		}
+		else
+		{
+			System.out.println("Go fish");
+			Collections.shuffle(modifiedDeck);
+			//shuffles the modified deck
+			System.out.println("");
+			System.out.println("Looks like you'll be adding the " + modifiedDeck.get(0) + " card to your hand.");
+			System.out.println("");
+			userHand.add(modifiedDeck.get(0));
+			//adds the first number in the modified deck to the user's hand
+			modifiedDeck.remove(0);
+			//removes index 0 from the modified deck and will shift everything to the right
+		}
+	}
+	
+	public static void computerChoose(ArrayList<Integer> userHand, ArrayList<Integer> computerHand, ArrayList<Integer> modifiedDeck)
+	//this will be the method where the computer chooses which actions to take
+	{
+		Random rand = new Random();
+		int index = rand.nextInt(computerHand.size());
+		//gets random value
+		Integer cardValue = new Integer(index);
+		//makes an integer object
+		System.out.println("Do you have a " + computerHand.get(index) + " card?");
+		int findCard = Collections.binarySearch(userHand, computerHand.get(index));
+		//checks to see if card is present
+		if(findCard >= 0)
+		{
+			System.out.println("It appears as though you do have " + computerHand.get(index) + " card.");
+			userHand.remove(cardValue);
+			Collections.sort(userHand);
+			computerHand.add(cardValue);
+			//removes the card from the user's hand and adds it to the computer's
+		}
+		else
+		{
+			System.out.println("Go fish");
+			Collections.shuffle(modifiedDeck);
+			//shuffles the modified deck
+			System.out.println("");
+			System.out.println("Looks like the computer added the " + modifiedDeck.get(0) + " card to your hand.");
+			System.out.println("");
+			computerHand.add(modifiedDeck.get(0));
+			//adds the first number in the modified deck to the computer's hand
+			modifiedDeck.remove(0);
+			//removes index 0 from the modified deck and will shift everything to the right		}
+		}
+	}
+}
+
+
