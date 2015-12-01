@@ -1,0 +1,145 @@
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.ArrayList;
+//needed classes from Java API
+
+public class Project14SarahGarfinkle {
+	//class name
+	private static final int ADD = 1;
+	private static final int SEARCH = 2;
+	private static final int QUIT = 3;
+	//options user will have for the menu
+	
+	public static void main(String[] args) {
+		ArrayList<String> emailAddresses = new ArrayList<String>(100);
+		//size will possibly 100 for the email addresses although will automatically increment up.
+		int size = 0;
+		//starts the size of the arraylist at 0
+		
+		Scanner input = new Scanner(System.in);
+		//allows user to input stuff
+		int menu = menuChoice(input);
+		//gets the menu method so user can choose which he or she likes
+		while (menu != QUIT) {
+			//ensures that user wants to continue using program
+			if (menu == ADD) {
+				//sees if the user would like to add an additional email address
+				System.out.println("Enter the email address");
+				//prompts for the email
+				String email = input.nextLine();
+				/*user press enter when completed with email. Important not, this is not idiot proof. 
+				realistically user would be likely to enter bob instead of bob@gmail.com and this program cannot detect it
+				*/
+				size = addNewEmail(emailAddresses, size, email);
+				//size = addNewEmail(emailAddresses, email);
+				//calls the method, gets the size of the arrayList
+			} 
+			else if (menu == SEARCH) {
+				//another option 
+				String email = autoComplete(emailAddresses, size, input);
+				//calls autocomplete method to see if letter is here
+				if (email != null)
+					System.out.println("Found: " + email);
+				//makes sure that the letter is found so that the computer can autoproduce a list of possible email addresses
+				else
+					System.out.println("No matching email was found");
+				//other option
+			} 
+			else 
+			{
+				System.out.println("Unanticipated case");
+				//in case of a real screw up
+			}
+
+			// priming read
+			menu = menuChoice(input);
+
+		} // end while
+
+	}
+
+	public static String autoComplete(ArrayList<String> data, int size, Scanner input)
+	//method will check to see if this email is entered by checking one letter at a time
+	{
+		System.out.println("Enter the first letters, one at a time");
+		String start = "";
+		//from user's input
+
+		while (true) {
+			String read = input.nextLine();
+			//gets user input
+			start += read;
+
+			int count = 0;
+			String result = "";
+			//computer will input this in
+
+			for (int i = 0; i < size; ++i) {
+				//finds all the data that will work with the inputed letter
+				if (data.get(i).startsWith(start))
+				// at index i, checks to see if it starts with the letter for each corresponding letter
+				{
+					result = data.get(i); // keep just the last one
+					System.out.println("Email contains " + start + ": " + data.get(i));
+					//prints the name that works for this letter at index i
+					++count;
+				}
+			}
+			if (count == 1)
+				return result;
+			//checks to see if there is a result and returns that name
+			if (count == 0)
+				return null;
+			//if not, does not return a name
+		}
+	}
+
+	public static int menuChoice(Scanner keyboard) {
+		System.out.println("Please choose from the following menu of choices:");
+		System.out.println("1. Enter a new email address");
+		System.out.println("2. Find an existing email address");
+		System.out.println("3. Quit.");
+		System.out.println("What is your choice?");
+		//gives the menu options
+		int choice = keyboard.nextInt();
+		//user will enter which number they want
+		keyboard.nextLine(); // get rid of newline
+
+		// Allow the user to re-enter data
+		while (choice < ADD || choice > QUIT) {
+			//idiot proofs with int values
+			System.out.println("You must choose a value between 1 and 3");
+			System.out.println("Please re-enter your choice");
+			choice = keyboard.nextInt();
+			keyboard.nextLine();
+		}
+
+		return choice;
+		//gives back the int that user chose so it can be inputed in the main menu
+	}
+
+	public static int addNewEmail(ArrayList<String> data, int size, String email)
+	{
+		Collections.sort(data);
+		//ensures the emails are placed in alphabetical order
+		//do not want garbage found in binary search
+		if(Collections.binarySearch(data, email) <= 0)
+			//searches to see if the email is not there
+		{
+			data.add(email);
+			//if it is not there, add the email
+			Collections.sort(data);
+			//resort it
+			//return the size of the ArrayList
+			return data.size();
+		}
+		if(Collections.binarySearch(data, email) > 0);
+		//if it is there, will print out that email already entered
+		//binary search returns >0 if something found
+		{
+			System.out.println("Email already inserted");
+			return data.size();
+		}
+	}
+	
+}
