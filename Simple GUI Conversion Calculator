@@ -1,0 +1,355 @@
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+/**
+ * 
+ * @author CS2334. 
+ * Modified by: Sarah Garfinkle
+ * @version 2016-10-14
+ *<P>
+ *Lab 9
+ *<P>
+ *This class creates a GUI for 
+ *simple number conversion calculator application
+ * 
+ */
+
+public class CalculatorFrame extends JFrame
+{
+
+    /** Use default UID */
+    private static final long serialVersionUID = 1L;
+
+    /** panel for the number sentence */
+    protected JPanel panel1;
+    /** panel for the error message */
+    protected JPanel panel2;
+    /** panel for the calculate translateButton */
+    protected JPanel panel3;
+    /** panel for the function radio buttons */
+    protected JPanel panel4;
+
+    /*
+     * Create objects for translateButton, 
+     * Label for number system, error
+     * message Text field for input 
+     * Radio buttons for Binary, Octal, Decimal,
+     * Hexadecimal
+     */
+    /** Group of operation buttons */
+    protected ButtonGroup operationButtonGroup;
+    /** Binary operation radio button */
+    protected JRadioButton binaryButton;
+    /** Octal operation radio button */
+    protected JRadioButton octalButton;
+    /** Decimal operation radio button */
+    protected JRadioButton decimalButton;
+    /** Hexadecimal operation radio button */
+    protected JRadioButton hexadecimalButton;
+
+    /** Translate button */
+    protected JButton translateButton;
+    /** Text that describes which number system is being used */
+    protected JLabel numberSystemText;
+    /** Text that contains the translation result */
+    protected JTextField resultText;
+    /** Text field for the user input */
+    protected JTextField inputText;
+    /** Text for the error message */
+    protected JLabel errorMessageText;
+
+    /**
+     * Constructor : build the GUI and define its behavior
+     * 
+     * @param title
+     * The title of the window.
+     */
+    public CalculatorFrame(String title)
+    {
+        // Initialize the frame
+        super(title);
+
+        // Initialize objects within the frame
+
+        // Create the sub-panels
+        panel1 = new JPanel();
+        panel2 = new JPanel();
+        panel3 = new JPanel();
+        panel4 = new JPanel();
+
+        // Create the objects in the sub-panels
+        inputText = new JTextField(8);
+        //initializes the object
+        numberSystemText = new JLabel();
+        resultText = new JTextField(12);
+        //Intiializes the result text
+        errorMessageText = new JLabel();
+        //This will be the error that pops up
+        //if a non number is implemented
+        translateButton = new JButton();
+        /*
+         * Creates the translate button and
+         * and then adds it to the third 
+         * panel.
+         */
+        binaryButton = new JRadioButton();
+        /*
+         * Adds the radio button to the fourth 
+         * panel
+         */
+        octalButton = new JRadioButton();
+        decimalButton = new JRadioButton();
+        hexadecimalButton = new JRadioButton();
+        /*
+         * initialzes and adds the following buttons
+         * to the fourth panel in this order
+         * Octal
+         * Decimal
+         * Hexadecimal
+         */
+        
+        // Set names of frame Object for testing purposes
+        // NOTE: DO NOT CHANGE THESE
+        errorMessageText.setName("errorMessageText");
+        resultText.setName("resultText");
+        inputText.setName("input");
+        translateButton.setName("translateButton");
+        binaryButton.setName("opBinary");
+        octalButton.setName("opOctal");
+        decimalButton.setName("opDecimal");
+        hexadecimalButton.setName("opHexadecimal");
+
+        // Change resultText to be non-editable
+        binaryButton.setText("Binary");
+        octalButton.setText("Octal");
+        decimalButton.setText("Decimal");
+        hexadecimalButton.setText("Hexadecimal");
+        translateButton.setText("Translate");
+        resultText.setEditable(false);
+        // sets the layout grid for the GUI of dimension 4*1
+        this.setLayout(new GridLayout(4, 0));
+        // Add the components to the panels
+        panel1.add(inputText);
+        panel1.add(numberSystemText);
+        panel1.add(resultText);
+        panel2.add(errorMessageText);
+        panel3.add(translateButton);
+        panel4.add(binaryButton);
+        panel4.add(octalButton);
+        panel4.add(decimalButton);
+        panel4.add(hexadecimalButton);
+        // Add the buttons to the button group
+        operationButtonGroup = new ButtonGroup();
+        operationButtonGroup.add(binaryButton);
+        operationButtonGroup.add(octalButton);
+        operationButtonGroup.add(decimalButton);
+        operationButtonGroup.add(hexadecimalButton);
+        // Add the panels to the frame
+        this.add(panel1);
+        this.add(panel2);
+        this.add(panel3);
+        this.add(panel4);
+        // Initialize the button in the button group
+        binaryButton.setSelected(true);
+        numberSystemText.setText("to Binary");
+
+        /*
+         * All ActionListeners: change the numberSystemText text to the name of
+         * the respective radio translateButton and clear the resultText text
+         * field
+         */
+        octalButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent autoGen) 
+            {
+                numberSystemText.setText("to Octal");
+                //Changes the text in between the calculation
+                //to Octal
+                resultText.setText("");
+                //Changes the text in the result to a blank
+                //string
+            } 
+        });
+        decimalButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent autoGen) 
+            {
+                numberSystemText.setText("to Decimal");
+                resultText.setText("");
+                /*
+                 * If the decimal button is selected
+                 * Sets the text to decimal
+                 * and sets the result to blank
+                 */
+            }
+            
+        });
+        hexadecimalButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent autoGen) 
+            {
+                numberSystemText.setText("to Hexadecimal");
+                resultText.setText("");
+                /*
+                 * if the hexidecimal button is selected
+                 * changes the text in panel 1 to
+                 * "To Hexidecimal" and then makes
+                 * the resulting text a blank field
+                 */
+            }
+            
+        });
+        binaryButton.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent autoGen) 
+            {
+                numberSystemText.setText("to Binary");
+                resultText.setText("");
+                /*
+                 * if the binary button is selected
+                 * changes the text in panel 1 to
+                 * "To Binary" and then makes
+                 * the resulting text a blank field
+                 */
+            }
+            
+        });
+
+        /*
+         * When the translate translateButton is pressed, perform the
+         * appropriate number translation using the Integer class.
+         */
+        translateButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                try
+                {
+                    // base and display the corresponding text
+                    // Hint: look at Integer.toString()
+                    String fromInput = inputText.getText().toString();
+                    /*
+                     * Gets the text from the user's input
+                     * and converts it into a string
+                     */
+                    if (fromInput.contains("."))
+                    {
+                        Long tBc = Long.parseLong(fromInput);
+                        //Converts to a long value
+                        //tBc stands for tobeconverted
+                        if (binaryButton.isSelected())
+                        {
+                            String binDisplay = 
+                                    tBc.toBinaryString(tBc.longValue());
+                            resultText.setText(binDisplay);
+                        }
+                        else if (octalButton.isSelected())
+                        {
+                            String octDisplay = 
+                                    tBc.toOctalString(tBc.longValue());
+                            resultText.setText(octDisplay);
+                        }
+                        else if (decimalButton.isSelected())
+                        {
+                            resultText.setText(fromInput);
+                        }
+                        else if (hexadecimalButton.isSelected())
+                        {
+                            String hexDisplay =
+                                    tBc.toHexString(tBc.longValue());
+                            resultText.setText(hexDisplay);
+                        }
+                        /*
+                         * This is done to check if there's a decimal
+                         * in the number system. If so we follow the
+                         * same step as the else if statement that 
+                         * does the integer conversion
+                         */
+                    }
+                    else if (!fromInput.contains("."))
+                    {
+                        Integer tBc = Integer.parseInt(fromInput);
+                        /*
+                         * from there, we convert to an integer
+                         * via the parseInt method which takes in a 
+                         * string and gets the integer value.
+                         */
+                        if (binaryButton.isSelected())
+                        {
+                            String binDisplay = 
+                                    tBc.toBinaryString(tBc.intValue());
+                            resultText.setText(binDisplay);
+                        }
+                        else if (octalButton.isSelected())
+                        {
+                            String octDisplay = 
+                                    tBc.toOctalString(tBc.intValue());
+                            resultText.setText(octDisplay);
+                        }
+                        else if (decimalButton.isSelected())
+                        {
+                            String decDisplay = tBc.toString();
+                            resultText.setText(decDisplay);
+                        }
+                        else if (hexadecimalButton.isSelected())
+                        {
+                            String hexaDisplay = 
+                                    tBc.toHexString(tBc.intValue());
+                            resultText.setText(hexaDisplay);
+                        }
+                    }
+                }
+                /*
+                 * Catch the Number Format Excepts when the user enters
+                 * something other than a number
+                 */
+                catch (NumberFormatException error)
+                {
+                    errorMessageText.setText("Please enter a number.");
+                    resultText.setText("ERROR");
+                    // display the error message
+                }
+            }
+        });
+
+        // Finish off configuring the frame
+        setSize(400, 200);
+        setVisible(true);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    /**
+     * Used to create the Calculator Frame
+     * 
+     * @param args
+     *            command-line arguments - not used
+     */
+    public static void main(String[] args)
+    {
+        CalculatorFrame frame = 
+                new CalculatorFrame("Decimal Conversion Window");
+        
+        // Force Web-Cat to not be unhappy with not using 
+        // the "frame" variable
+        frame.getTitle();
+    }
+
+}
